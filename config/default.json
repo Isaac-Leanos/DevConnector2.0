@@ -1,0 +1,3 @@
+{
+    "mongoURI" : "mongodb+srv://devConnectorAdmin:Password123@cluster0-gqupu.azure.mongodb.net/test?retryWrites=true&w=majority"
+}
