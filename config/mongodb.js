@@ -1,8 +1,8 @@
 const mongoose = require("mongoose"); // object modeling tool for mongo db
-const config = require("config");
+const mongodbURI = require("config").get('mongoURI');
 
 
-const mongodbURI = config.get("mongoURI"); 
+// --------------------
 
 const connectDB = async ()=>
 {
@@ -10,7 +10,8 @@ const connectDB = async ()=>
     {
         await mongoose.connect(mongodbURI, {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useCreateIndex: true
         });
         console.log('~~~ mongoose->mongoDB connected ~~~');
     } catch (error) 
