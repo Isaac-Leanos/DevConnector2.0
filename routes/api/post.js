@@ -5,9 +5,10 @@ const express = require("express");
 
 const router = express.Router();
 
-//@route
-//@access
-router.get("/", (req, res)=> // change to function 
+//@route GET /api/profile/:user
+//@desc access user profile
+//@access PRIVATE
+router.get("/", (req, res)=> 
 {
     res.send('post router')
 });

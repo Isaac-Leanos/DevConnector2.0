@@ -18,9 +18,9 @@ module.exports = function(req, res, next)
                      if(!token) return res.status(401).json({msg: 'No token, request denied'});
 
                      try {
-                         const decoded = jwt.verify(token, config.get("jwtSecret")); // verify token has not been altered or simply verify user
+                         const decoded = jwt.verify(token, config.get("jwtSecret")); // verify token has not been altered to any degree
                          req.user = decoded.user; // payload object -> attach user property to request object for further use 
-                         console.log('~~~ payload', decoded.user);
+                         console.log('~~~ auth mw payload', decoded.user);
                          next();
                      } catch (error) {
                          console.log("~~~ auth middleware error", error)

@@ -20,10 +20,10 @@ app.get('/',(req, res)=>
 
 // ------------------------------------(R O U T E R)----------------------------------------------------------
 
-app.use('/api/users', require('./routes/api/users').router); // when we hit this endpoint, use router bein required
+app.use('/api/user', require('./routes/api/user').router); // when we hit this endpoint, use router bein required
 app.use('/api/auth', require('./routes/api/auth').router);
-app.use('/api/profiles', require('./routes/api/profiles').router);
-app.use('/api/posts', require('./routes/api/posts').router);
+app.use('/api/profile', require('./routes/api/profile').router);
+app.use('/api/post', require('./routes/api/post').router);
 
 
 // ----------------------------------------------------------------------------------------------
