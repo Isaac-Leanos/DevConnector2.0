@@ -3,6 +3,8 @@ const jwtAuth = require('../../middleware/auth');
 const Profile = require('../../models/Profile').Profile;
 const User = require('../../models/User').User;
 const {check, validationResult} = require('express-validator')
+const request = require('request');
+const config = require('config')
 
 // ------------------------------------()----------------------------------------------------------
 
@@ -385,6 +387,50 @@ router.delete("/education/:edu_id", jwtAuth, async (req, res)=>
         res.status(500).send("Server Error")
     }
 });
+
+
+// ------------------------------------( G I T H U B - A P I )----------------------------------------------------------
+
+
+
+//@route GET /api/profile/github/:username
+//@desc GET github data for user
+//@access PUBLIC
+router.get("/github/:username", async (req, res)=> 
+{
+
+    try 
+    {
+        const requestOptions = {
+            uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&client_id=${config.get('githubApiClientId')}&client_secret=${config.get('githubApiClientSecret')}`,
+            method: 'get',
+            headers: {'user-agent': 'node.js'}
+        }
+
+        request(requestOptions, (error, response, body)=>
+        {
+            if (error) console.log(error);
+
+            if(response.statusCode !== 200)
+            {
+                return res.status(400).json({ msg: 'Github profile not found' }); // 404 not found
+            }
+
+           return res.json(JSON.parse(body) );
+
+        })
+
+        
+    } catch (error) 
+    {
+        console.log(error.message)
+        res.status(500).send("Server Error")
+    }
+});
+
+
+
+
 
 module.exports = {
     router

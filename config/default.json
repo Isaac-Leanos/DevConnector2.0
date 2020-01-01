@@ -1,4 +1,6 @@
 {
     "mongoURI" : "mongodb+srv://devConnectorAdmin:Password123@cluster0-gqupu.azure.mongodb.net/test?retryWrites=true&w=majority",
-    "jwtSecret" : "userSecret"
+    "jwtSecret" : "userSecret",
+    "githubApiClientId": "805e661e846347dddabe",
+    "githubApiClientSecret": "860c9c31a5465e682678cce5b6377e94d39a06d5"
 }
