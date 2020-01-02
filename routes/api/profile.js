@@ -207,7 +207,8 @@ router.put("/experience", [ jwtAuth,
 ], async (req, res)=> 
 {
     const errors = validationResult(req);
-    if(!errors.isEmpty()) {
+    if(!errors.isEmpty()) 
+    {
         return res.status(400).json({ errors: errors.array() });
     }
 
@@ -393,8 +394,8 @@ router.delete("/education/:edu_id", jwtAuth, async (req, res)=>
 
 
 
-//@route GET /api/profile/github/:username
-//@desc GET github data for user
+//@route  GET /api/profile/github/:username
+//@desc   GET github data for user
 //@access PUBLIC
 router.get("/github/:username", async (req, res)=> 
 {
