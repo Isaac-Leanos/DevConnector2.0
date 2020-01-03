@@ -342,7 +342,7 @@ router.delete("/:pst_id/comment/:cmt_id", jwtAuth, async (req, res)=>
 
     try 
     {
-        // find post we are dealing with
+        // find post we are dealing with with
         const post = await Post.findOne({_id: postToFind});
 
         if(!post)
