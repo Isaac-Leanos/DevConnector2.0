@@ -322,6 +322,7 @@ router.post("/:pst_id/comment", [ jwtAuth,
     } catch (error) 
     {
         console.log("~~~", error)
+
         return res.status(500).send('Server Error')
     }
 
@@ -331,44 +332,61 @@ router.post("/:pst_id/comment", [ jwtAuth,
 //@route  DELETE /api/post/:pst_id/comment/:cmt_id
 //@desc   DELETE comment to a post
 //@access PRIVATE
-router.post("/:pst_id/comment/:cmt_id", jwtAuth, async (req, res)=> 
+router.delete("/:pst_id/comment/:cmt_id", jwtAuth, async (req, res)=> 
 {
     
-    // extract text field, post id, & user from request object
-    const {text} = req.body;
+    // extract user, post, & comment ids from request object
     const user = req.user.id;
     const postToFind = req.params.pst_id;
+    const cmtToFind = req.params.cmt_id;
 
     try 
     {
-        // find user -> grab user id and avatar for utilization
-        const {avatar} = await User.findOne({_id: user});
-
-        // construct our comment
-        const comment = {
-            user,
-            text, // required
-            avatar,
-        }  
-
-        // find post user is commenting on and add comment
-        const post = await Post.findById({_id: postToFind});
+        // find post we are dealing with
+        const post = await Post.findOne({_id: postToFind});
 
         if(!post)
         {
             return res.status(400).json({ errors: [{msg: 'Post not found'}]})       
-        }  
+        } 
 
-        post.comments.unshift(comment);
+        // find targeted comment
+        const comment = post.comments.find(x => (
+            x._id.toString() === cmtToFind
+        ))
+
+        // if comment doesn't exist
+        if(!comment)
+        {
+            return res.status(400).json({ errors: [{msg: 'Comment not found'}]})       
+        }
+
+        // if comment set for deletion wasn't created by user trying to delete the comment
+        if(comment.user.toString() !== user)
+        {
+            return res.status(400).json({ errors: [{msg: 'User not authorized to make this request'}]})       
+        }
+        
+        // filter out comment set for deletion
+        const clean = post.comments.filter(x => (
+            x._id.toString() !== cmtToFind
+        ))
+
+        post.comments = [...clean]
 
         await post.save()
         
-        return res.json({addedComment: post, msg: 'Comment added'})
+        return res.json({deletedComment: comment, msg: 'Comment deleted'})
 
 
     } catch (error) 
     {
         console.log("~~~", error)
+        // if error is url post id related
+        if(error.kind === 'ObjectId') 
+        {
+            return res.status(500).send('Post not found')            
+        }
         return res.status(500).send('Server Error')
     }
 
